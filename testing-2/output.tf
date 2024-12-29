@@ -1,19 +1,21 @@
 output "public_instance_id" {
-  description = "ID of the EC2 instance in the public subnet"
-  value       = aws_instance.public_instance.id
+  value = module.public_instance.instance_id
 }
-
 output "private_instance_1_id" {
-  description = "ID of the first EC2 instance in the private subnet"
-  value       = aws_instance.private_instance_1.id
+  value = module.private_instances["private-ec2-instance-1"].instance_id
 }
-
 output "private_instance_2_id" {
-  description = "ID of the second EC2 instance in the private subnet"
-  value       = aws_instance.private_instance_2.id
+  value = module.private_instances["private-ec2-instance-2"].instance_id
 }
-
 output "public_instance_public_ip" {
-  description = "Public IP of the EC2 instance in the public subnet"
-  value       = aws_instance.public_instance.public_ip
+  value = module.public_instance.public_ip
+}
+output "public_instance_private_ip" {
+  value = module.public_instance.private_ip
+}
+output "private_instance_1_private_ip" {
+  value = module.private_instances["private-ec2-instance-1"].private_ip
+}
+output "private_instance_2_private_ip" {
+  value = module.private_instances["private-ec2-instance-2"].private_ip
 }

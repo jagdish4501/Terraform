@@ -1,6 +1,6 @@
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_support = true
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
     Name = "main-vpc"
@@ -17,9 +17,9 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "private" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = var.private_subnet_az
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = var.private_subnet_az
   tags = {
     Name = "private-subnet"
   }
@@ -67,35 +67,28 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
-resource "aws_instance" "public_instance" {
-  ami = var.public_ami
-  instance_type   = var.instance_type
-  subnet_id       = aws_subnet.public.id
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-  associate_public_ip_address = true
+module "public_instance" {
+  source              = "./modules/ec2"
+  ami                 = var.public_ami
+  instance_type       = var.instance_type
+  subnet_id           = aws_subnet.public.id
+  security_group_ids  = [aws_security_group.ec2_sg.id]
+  associate_public_ip = true
   tags = {
     Name = "public-ec2-instance"
   }
 }
 
-resource "aws_instance" "private_instance_1" {
-  ami             = var.private_ami
-  instance_type   = var.instance_type
-  subnet_id       = aws_subnet.private.id
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-  associate_public_ip_address = false
-  tags = {
-    Name = "private-ec2-instance-1"
-  }
-}
 
-resource "aws_instance" "private_instance_2" {
-  ami             = var.private_ami
-  instance_type   = var.instance_type
-  subnet_id       = aws_subnet.private.id
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-  associate_public_ip_address = false
+module "private_instances" {
+  source              = "./modules/ec2"
+  for_each            = toset(["private-ec2-instance-1", "private-ec2-instance-2"])
+  ami                 = var.private_ami
+  instance_type       = var.instance_type
+  subnet_id           = aws_subnet.private.id
+  security_group_ids  = [aws_security_group.ec2_sg.id]
+  associate_public_ip = false
   tags = {
-    Name = "private-ec2-instance-2"
+    Name = each.key
   }
 }
