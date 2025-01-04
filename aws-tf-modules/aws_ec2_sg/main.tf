@@ -8,16 +8,15 @@ resource "aws_security_group" "ec2_sg" {
       from_port   = ingress.value.from_port
       to_port     = ingress.value.to_port
       protocol    = "tcp"
-      cidr_blocks = var.cidr_blocks
+      cidr_blocks = var.allowed_ingress_cidr_blocks
     }
   }
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"  # Allow all outbound traffic
-    cidr_blocks = var.cidr_blocks
+    cidr_blocks = var.allowed_egress_cidr_blocks
   }
-
   tags = {
     Name = var.security_group_name
   }

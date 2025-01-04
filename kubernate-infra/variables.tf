@@ -26,7 +26,17 @@ variable "public_key" {
   default = ""
 }
 variable "ingress_ports_master" {
-  default = [{ from_port = 6443, to_port = 6443 },
+  default = [{ from_port = 22, to_port = 22},
+    { from_port = 6443, to_port = 6443 },
+    { from_port = 2379, to_port = 2380 },
+    { from_port = 10250, to_port = 10250 },
+    { from_port = 10259, to_port = 10259 },
+    { from_port = 10257, to_port = 10257 }]
+}
+
+variable "ingress_ports_worker" {
+  default = [{from_port=22,to_port=22},
+    { from_port = 6443, to_port = 6443 },
     { from_port = 2379, to_port = 2380 },
     { from_port = 10250, to_port = 10250 },
     { from_port = 10259, to_port = 10259 },
