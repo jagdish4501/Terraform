@@ -1,33 +1,45 @@
-variable "public_subnet_az" {
-  description = "The availability zone for the public subnet"
-  type        = string
-  default     = "ap-south-1a"
+variable "vpc-cidr_block" {
+  default = "14.0.0.0/16"
+}
+variable "public_subnet_cidr_block" {
+  default = ["14.0.1.0/24"]
+}
+variable "public_subnet_azs" {
+  default = ["ap-south-1a"]
+}
+variable "private_subnet_cidr_block" {
+  default = ["14.0.2.0/24","14.0.3.0/24"]
+}
+variable "private_subnet_azs" {
+  default = ["ap-south-1b","ap-south-1b"]
 }
 
-variable "private_subnet_az" {
-  description = "The availability zone for the private subnet"
-  type        = string
-  default     = "ap-south-1b"
-}
 
 variable "instance_type" {
-  description = "The EC2 instance type"
-  type        = string
   default     = "t2.micro"
 }
 
 variable "ec2_ami" {
-  description = "The AMI ID for the EC2 instance"
-  type        = string
   default     = "ami-053b12d3152c0cc71"
 }
 
 variable "key_name" {
-  type    = string
   default = "id_rsa_personal"
 }
 
 variable "public_key" {
-  type    = string
   default = ""
+}
+
+
+variable "ingress_ports_master" {
+  type = list(object({
+    from_port = number
+    to_port   = number
+  }))
+  default = [{ from_port = 6443, to_port = 6443 },
+    { from_port = 2379, to_port = 2380 },
+    { from_port = 10250, to_port = 10250 },
+    { from_port = 10259, to_port = 10259 },
+    { from_port = 10257, to_port = 10257 }]
 }
