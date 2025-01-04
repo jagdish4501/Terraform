@@ -6,6 +6,7 @@ module "new_vpc" {
   public_subnet_azs=var.public_subnet_azs
   private_subnet_cidr_block = var.private_subnet_cidr_block
   private_subnet_azs = var.private_subnet_azs
+  enable_nat_gateway = true
 }
 
 
