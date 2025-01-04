@@ -8,7 +8,6 @@ variable "ingress_ports" {
     { from_port = 6443, to_port = 6443 },
   ]
 }
-
 variable "cidr_blocks" {
   description = "CIDR blocks allowed to access the EC2 instance on the specified ports"
   type        = list(string)

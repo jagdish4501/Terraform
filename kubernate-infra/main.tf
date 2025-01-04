@@ -20,12 +20,11 @@ resource "aws_security_group" "ec2_sg" {
     to_port     = 0
     protocol    = "-1"
   }
-
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
   }
 }
 
@@ -36,7 +35,7 @@ resource "aws_key_pair" "jagdish" {
 }
 
 module "public_instance" {
-  source              = "./modules/ec2"
+  source              = "../aws-tf-modules/ec2"
   ami                 = var.ec2_ami
   instance_type       = var.instance_type
   subnet_id           = module.new_vpc.public_subnet_ids[0]
@@ -46,11 +45,12 @@ module "public_instance" {
   tags = {
     Name = "public-ec2-instance"
   }
+  depends_on = [ aws_security_group.ec2_sg ,module.new_vpc]
 }
 
 
 module "private_instances" {
-  source              = "./modules/ec2"
+  source              = "../aws-tf-modules/ec2"
   for_each            = toset(["private-ec2-instance-1", "private-ec2-instance-2"])
   ami                 = var.ec2_ami
   instance_type       = var.instance_type
@@ -61,4 +61,5 @@ module "private_instances" {
   tags = {
     Name = each.key
   }
+  depends_on = [ aws_security_group.ec2_sg ,module.new_vpc]
 }
