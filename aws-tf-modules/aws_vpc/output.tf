@@ -24,12 +24,12 @@ output "private_route_table_id" {
   value = aws_route_table.private.id
 }
 output "elastic_ip" {
-  value = aws_eip.elastic_ip[0].public_ip
+  value = var.enable_nat_gateway?aws_eip.elastic_ip[0].public_ip:""
 }
 
 output "nat_elastic_ip" {
-  value = aws_nat_gateway.gateway[0].public_ip
+  value = var.enable_nat_gateway?aws_nat_gateway.gateway[0].public_ip:""
 }
 output "nat_gateway_id" {
-  value = aws_nat_gateway.gateway[0].id
+  value = var.enable_nat_gateway?aws_nat_gateway.gateway[0].id:""
 }
