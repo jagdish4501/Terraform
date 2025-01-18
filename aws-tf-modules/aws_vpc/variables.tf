@@ -20,7 +20,7 @@ variable "public_subnet_azs" {
 }
 variable "private_subnet_azs" {
   type = list(string)
-  default = ["ap-south-1a","ap-south-1a"]
+  default = ["ap-south-1b","ap-south-1c"]
 }
 variable "enable_nat_gateway" {
   type = bool

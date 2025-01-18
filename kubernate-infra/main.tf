@@ -6,7 +6,7 @@ module "new_vpc" {
   public_subnet_azs=var.public_subnet_azs
   private_subnet_cidr_block = var.private_subnet_cidr_block
   private_subnet_azs = var.private_subnet_azs
-  enable_nat_gateway = true
+  enable_nat_gateway = false
 }
 module "ec2_master_node_sg" {
   source = "../aws-tf-modules/aws_ec2_sg"

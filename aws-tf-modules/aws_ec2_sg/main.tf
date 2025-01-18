@@ -1,14 +1,15 @@
 resource "aws_security_group" "ec2_sg" {
+  description = "Security group for EC2 instance"
   name        = var.security_group_name
-  description = "Security group for EC2 instance with specific ports open"
   vpc_id      = var.vpc_id
   dynamic "ingress" {
     for_each = var.ingress_ports
     content {
       from_port   = ingress.value.from_port
       to_port     = ingress.value.to_port
-      protocol    = "tcp"
+      protocol    = ingress.value.protocol
       cidr_blocks = var.allowed_ingress_cidr_blocks
+      security_groups = var.allowed_ingress_security_groups # This is an alternative to specifying CIDR blocks for controlling which IP ranges can access the instance.
     }
   }
   egress {

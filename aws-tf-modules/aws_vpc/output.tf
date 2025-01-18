@@ -7,27 +7,19 @@ output "public_subnet_ids" {
 output "private_subnet_ids" {
   value = aws_subnet.private_subnets[*].id
 }
-output "public_subnet_azs" {
-  value = aws_subnet.public_subnets[*].availability_zone 
-}
-output "private_subnet_azs" {
-  value = aws_subnet.private_subnets[*].availability_zone
-}
 output "internet_gateway_id" {
-  value       = aws_internet_gateway.gateway.id
+  value       = aws_internet_gateway.internet_gateway.id
 }
 output "public_route_table_id" {
   value       = aws_route_table.public.id
 }
-
 output "private_route_table_id" {
   value = aws_route_table.private.id
 }
 output "elastic_ip" {
   value = var.enable_nat_gateway?aws_eip.elastic_ip[0].public_ip:""
 }
-
-output "nat_elastic_ip" {
+output "nat_gateway_public_ip" {
   value = var.enable_nat_gateway?aws_nat_gateway.gateway[0].public_ip:""
 }
 output "nat_gateway_id" {
