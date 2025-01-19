@@ -1,7 +1,7 @@
 module "kubernate_vpc" {
   source                    = "../aws-tf-modules/aws_vpc"
   vpc_cidr                  = var.vpc_cidr_block # Corrected variable name
-  vpc_name                  = "kubernate-vpc"
+  vpc_name                  = var.vpc_name
   public_subnet_cidr_block  = var.public_subnet_cidr_block
   public_subnet_azs         = var.public_subnet_azs
   private_subnet_cidr_block = var.private_subnet_cidr_block
@@ -30,6 +30,7 @@ resource "aws_key_pair" "jagdish" {
 
 module "public_instance" {
   source              = "../aws-tf-modules/aws_ec2"
+  for_each            = toset(["public-ec2-instance"])
   instance_type       = var.instance_type
   ami                 = var.ec2_ami
   subnet_id           = module.kubernate_vpc.public_subnet_ids[0]
@@ -37,7 +38,7 @@ module "public_instance" {
   associate_public_ip = true
   key_name            = aws_key_pair.jagdish.key_name
   tags = {
-    Name = "public-ec2-instance"
+    Name = each.key
   }
   depends_on = [module.ec2_master_node_sg, module.kubernate_vpc]
 }

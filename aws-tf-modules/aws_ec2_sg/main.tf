@@ -9,7 +9,6 @@ resource "aws_security_group" "ec2_sg" {
       to_port     = ingress.value.to_port
       protocol    = ingress.value.protocol
       cidr_blocks = var.allowed_ingress_cidr_blocks
-      security_groups = var.allowed_ingress_security_groups # This is an alternative to specifying CIDR blocks for controlling which IP ranges can access the instance.
     }
   }
   egress {

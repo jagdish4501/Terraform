@@ -47,6 +47,7 @@ resource "aws_nat_gateway" "nat_gateway" {
   tags = {
     Name = "nat_gateway_${var.vpc_name}"
   }
+  depends_on = [aws_eip.elastic_ip]
 }
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.main.id
@@ -65,7 +66,7 @@ resource "aws_route_table" "private_route_table" {
     for_each = var.enable_nat_gateway?[1]:[]
     content {
       cidr_block = "0.0.0.0/0"
-      nat_gateway_id = aws_nat_gateway.gateway[0].id
+      nat_gateway_id = aws_nat_gateway.nat_gateway[0].id
     }
   }
   tags = {
