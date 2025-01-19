@@ -1,44 +1,45 @@
-variable "vpc-cidr_block" {
-  default = "14.0.0.0/16"
+variable "vpc_cidr_block" {
+  type    = string
 }
 variable "public_subnet_cidr_block" {
-  default = ["14.0.1.0/24"]
+  type    = list(string)
 }
 variable "public_subnet_azs" {
-  default = ["ap-south-1a"]
+  type    = list(string)
 }
 variable "private_subnet_cidr_block" {
-  default = ["14.0.2.0/24","14.0.3.0/24"]
+  type    = list(string)
 }
 variable "private_subnet_azs" {
-  default = ["ap-south-1b","ap-south-1b"]
+  type    = list(string)
+}
+variable "enable_nat_gateway" {
+  type = bool
 }
 variable "instance_type" {
-  default     = "t2.micro"
+  type    = string
 }
 variable "ec2_ami" {
-  default     = "ami-053b12d3152c0cc71"
+  type    = string
 }
 variable "key_name" {
-  default = "id_rsa_personal"
+  type = string
 }
 variable "public_key" {
-  default = ""
+  type = string
 }
 variable "ingress_ports_master" {
-  default = [{ from_port = 22, to_port = 22},
-    { from_port = 6443, to_port = 6443 },
-    { from_port = 2379, to_port = 2380 },
-    { from_port = 10250, to_port = 10250 },
-    { from_port = 10259, to_port = 10259 },
-    { from_port = 10257, to_port = 10257 }]
+  type = list(object({
+    from_port = string,
+    to_port=string
+    protocol=string
+  }))
 }
 
 variable "ingress_ports_worker" {
-  default = [{from_port=22,to_port=22},
-    { from_port = 6443, to_port = 6443 },
-    { from_port = 2379, to_port = 2380 },
-    { from_port = 10250, to_port = 10250 },
-    { from_port = 10259, to_port = 10259 },
-    { from_port = 10257, to_port = 10257 }]
+  type = list(object({
+    from_port = string,
+    to_port=string
+    protocol=string
+  }))
 }

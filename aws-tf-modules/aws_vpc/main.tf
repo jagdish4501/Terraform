@@ -15,7 +15,6 @@ resource "aws_subnet" "public_subnets" {
   tags = {
     Name = "public_subnet_${var.vpc_name}_${element(var.public_subnet_cidr_block, count.index)}"
   }
-  depends_on = [ aws_vpc.main ]
 }
 resource "aws_subnet" "private_subnets" {
   count = length(var.private_subnet_cidr_block)
@@ -26,7 +25,6 @@ resource "aws_subnet" "private_subnets" {
   tags = {
     Name = "private_subnet_${var.vpc_name}_${element(var.private_subnet_cidr_block, count.index)}"
   }
-  depends_on = [ aws_vpc.main ]
 }
 
 resource "aws_internet_gateway" "internet_gateway" {
@@ -34,7 +32,6 @@ resource "aws_internet_gateway" "internet_gateway" {
   tags = {
     Name = "internet_gateway_${var.vpc_name}"
   }
-  depends_on = [ aws_vpc.main ]
 }
 
 resource "aws_eip" "elastic_ip" {
@@ -50,18 +47,16 @@ resource "aws_nat_gateway" "nat_gateway" {
   tags = {
     Name = "nat_gateway_${var.vpc_name}"
   }
-  depends_on = [ aws_eip.elastic_ip ,aws_subnet.public_subnets]
 }
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.main.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gateway.id
+    gateway_id = aws_internet_gateway.internet_gateway.id
   }
   tags = {
     Name = "public_route_table_${var.vpc_name}"
   }
-  depends_on = [ aws_vpc.main ]
 }
 
 resource "aws_route_table" "private_route_table" {
@@ -76,18 +71,17 @@ resource "aws_route_table" "private_route_table" {
   tags = {
     Name = "private_route_table_${var.vpc_name}"
   }
-  depends_on = [ aws_vpc.main ,aws_nat_gateway.gateway]
 }
 resource "aws_route_table_association" "public_route_table_association_with_subnet" {
   count          = length(var.public_subnet_cidr_block)
   subnet_id      = aws_subnet.public_subnets[count.index].id
-  route_table_id = aws_route_table.public.id
-  depends_on = [ aws_subnet.public_subnets ,aws_route_table.public]
+  route_table_id = aws_route_table.public_route_table.id
+  depends_on = [ aws_subnet.public_subnets ,aws_route_table.public_route_table]
 }
 resource "aws_route_table_association" "private_route_table_association_with_subnet" {
   count = length(var.private_subnet_cidr_block)
   subnet_id = aws_subnet.private_subnets[count.index].id
-  route_table_id = aws_route_table.private.id
-  depends_on = [aws_subnet.private_subnets,aws_route_table.private ]
+  route_table_id = aws_route_table.private_route_table.id
+  depends_on = [aws_subnet.private_subnets,aws_route_table.private_route_table ]
 }
 

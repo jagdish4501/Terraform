@@ -11,11 +11,10 @@ variable "ingress_ports" {
     to_port   = number
     protocol= string
   }))
-  default = [{ from_port = 22, to_port = 22,protocol = "tcp"}]
 }
 variable "allowed_ingress_cidr_blocks" {
   type        = list(string)
-  default     = ["0.0.0.0/0"] 
+  default     = ["0.0.0.0/0"]
 }
 variable "allowed_egress_cidr_blocks" {
   type = list(string)
@@ -23,5 +22,5 @@ variable "allowed_egress_cidr_blocks" {
 }
 variable "allowed_ingress_security_groups" {
   type = list(string)
-  default = ["sg-xxxxxxxx", "sg-xxxx"]
+  default = null
 }
