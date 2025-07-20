@@ -9,16 +9,9 @@ resource "aws_instance" "instance" {
   monitoring                  = var.monitoring
   disable_api_termination     = var.disable_api_termination
   tags                        = var.tags
-  # EBS Block Device Configuration
-  # dynamic "ebs_block_device" {
-  #   for_each = var.ebs_volume_size > 0 ? [1] : []
-  #   content {
-  #     device_name = var.ebs_device_name
-  #     volume_size = var.ebs_volume_size
-  #     volume_type = var.ebs_volume_type
-  #   }
-  # }
-  
+  lifecycle {
+    prevent_destroy = false
+  }
 }
 
 # Optional Elastic IP attachment if enabled

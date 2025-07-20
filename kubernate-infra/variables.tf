@@ -22,7 +22,7 @@ variable "enable_nat_gateway" {
 variable "instance_type" {
   type    = string
 }
-variable "ec2_ami" {
+variable "ami" {
   type    = string
 }
 variable "key_name" {
@@ -45,4 +45,9 @@ variable "ingress_ports_worker" {
     to_port=string
     protocol=string
   }))
+}
+variable "assign_elastic_ip" {
+  description = "Whether to assign an Elastic IP to the EC2 instance"
+  type        = bool
+  default     = false
 }

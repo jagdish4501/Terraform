@@ -34,6 +34,8 @@ secrets.tfvars.json
 .terraform.lock.hcl
 
 # Ensure that files ignored in the parent directory also affect subdirectories
+**/*.venv
+**/*venv
 **/*.tfstate
 **/*.tfstate.*
 **/*.tfplan

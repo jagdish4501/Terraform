@@ -25,3 +25,45 @@ output "nat_gateway_public_ip" {
 output "nat_gateway_id" {
   value = var.enable_nat_gateway ? aws_nat_gateway.nat_gateway[0].id : null
 }
+
+output "nat_gateway_allocation_id" {
+  value = var.enable_nat_gateway ? aws_eip.elastic_ip[0].allocation_id : null
+}
+output "nat_gateway_association_id" {
+  value = var.enable_nat_gateway ? aws_eip.elastic_ip[0].association_id : null
+}
+
+output "public_subnet_cidr_blocks" {
+  value = aws_subnet.public_subnets[*].cidr_block
+}
+
+output "private_subnet_cidr_blocks" {
+  value = aws_subnet.private_subnets[*].cidr_block
+}
+
+output "vpc_name" {
+  value = var.vpc_name
+}
+
+output "public_subnet_cidr_block" {
+  value = var.public_subnet_cidr_block
+}
+
+output "private_subnet_cidr_block" {
+  value = var.private_subnet_cidr_block
+}
+
+output "public_subnet_azs" {
+  value = var.public_subnet_azs
+}
+
+output "private_subnet_azs" {
+  value = var.private_subnet_azs
+}
+
+output "enable_nat_gateway" {
+  value = var.enable_nat_gateway
+}
+
+
+

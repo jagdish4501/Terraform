@@ -1,0 +1,58 @@
+config:
+  gcp:project: gcp-dev-466419
+  learning:region: asia-south2
+  learning:zone: asia-south2-b
+  learning:vpc_name: kubernate-vpc
+  learning:vpc_cidr_block: 10.0.0.0/16
+  learning:public_subnet_cidr_block:
+    - 10.0.1.0/24
+  learning:private_subnet_cidr_block:
+    - 10.0.2.0/24
+    - 10.0.3.0/24
+  learning:public_subnet_azs:
+    - asia-south2-b
+  learning:private_subnet_azs:
+    - asia-south2-c
+    - asia-south2-d
+  learning:instance_type: e2-medium
+  learning:enable_nat_gateway: "true"
+  learning:public_key: ubuntu:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEbkhW9gr0iRMzd2fV0If8ru7Dx0+rr2LYE+Zu8/m8XPz4P61QCig/SaKeU4t/VCTVqTDeqR5TLGCiCSysfkuKydMyr3ixN7gs6I8Ngw9uApWhjrGrKJRdz5sP8E2KOlqEG9yZXDYRLRVY7x1Lzqjs26X7g8/jp0xZGcMZetdMdIjoVVd2nz/EHN2gSB94jZI8kHZTFpx1jjQkosr4veDxKiGsMtPfE4fqlvDze3TkiYw71gx9u5K3ZYXXqArVE0CkThBcyh6UBnTRSwOlRUGiuyZRaMjg1sNwLBzYmLVFB3kdx4ae3po6TieghWwtYfVN8eaHjMZL+vTVWMBnudN1 universal-key
+  learning:ingress_ports_master:
+    - from_port: 22
+      to_port: 22
+      protocol: tcp
+    - from_port: 6443
+      to_port: 6443
+      protocol: tcp
+    - from_port: 2379
+      to_port: 2380
+      protocol: tcp
+    - from_port: 10250
+      to_port: 10250
+      protocol: tcp
+    - from_port: 10259
+      to_port: 10259
+      protocol: tcp
+    - from_port: 10257
+      to_port: 10257
+      protocol: tcp
+  learning:ingress_ports_worker:
+    - from_port: 22
+      to_port: 22
+      protocol: tcp
+    - from_port: 6443
+      to_port: 6443
+      protocol: tcp
+    - from_port: 2379
+      to_port: 2380
+      protocol: tcp
+    - from_port: 10250
+      to_port: 10250
+      protocol: tcp
+    - from_port: 10259
+      to_port: 10259
+      protocol: tcp
+    - from_port: 10257
+      to_port: 10257
+      protocol: tcp
+  learning:machine_type: e2-medium

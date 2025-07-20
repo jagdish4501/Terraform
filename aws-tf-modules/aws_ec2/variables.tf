@@ -28,6 +28,7 @@ variable "user_data" {
   type        = string
   default     = null
 }
+
 variable "monitoring" {
   description = "Enable detailed monitoring for the instance."
   type        = bool
