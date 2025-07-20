@@ -40,3 +40,5 @@ pulumi.export("firewall_rules", {
     "worker_node": "worker-node-fw",
     "internal_communication": "internal-communication-fw"
 })
+
+
