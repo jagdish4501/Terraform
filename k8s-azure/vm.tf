@@ -11,7 +11,6 @@ resource "azurerm_network_interface" "master" {
   name                = "${var.master_vm_name}-nic"
   location            = var.location
   resource_group_name = azurerm_resource_group.main.name
-
   ip_configuration {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.public.id
@@ -40,44 +39,44 @@ resource "azurerm_linux_virtual_machine" "master" {
 
   os_disk {
     caching              = "ReadWrite"
+    disk_size_gb        = "30"
     storage_account_type = "Standard_LRS"
   }
-
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+    publisher = var.vm_image.publisher
+    offer     = var.vm_image.offer
+    sku       = var.vm_image.sku
+    version   = var.vm_image.version
   }
 }
 
-# Two Private VMs without Public IP
+# Two private subnets: azurerm_subnet.private[0] and azurerm_subnet.private[1]
+# 3 VMs 2 in 1 private subnet 1 in second → total 4 VMs
 resource "azurerm_network_interface" "private" {
-  count               = 2
+  count               = 1
   name                = "private-vm-${count.index + 1}-nic"
   location            = var.location
   resource_group_name = azurerm_resource_group.main.name
-
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.private[count.index].id
+    # Map first 2 NICs to first subnet, next 2 NICs to second subnet
+    subnet_id                     = azurerm_subnet.private[count.index < 2 ? 0 : 1].id
     private_ip_address_allocation = "Dynamic"
   }
 }
-
 resource "azurerm_network_interface_security_group_association" "private" {
-  count                    = 2
+  count                     = 1
   network_interface_id      = azurerm_network_interface.private[count.index].id
   network_security_group_id = azurerm_network_security_group.worker_node.id
 }
 
 resource "azurerm_linux_virtual_machine" "private" {
-  count               = 2
-  name                = "private-vm-${count.index + 1}"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = var.location
-  size                = var.vm_size
-  admin_username      = var.admin_username
+  count                 = 1
+  name                  = "private-vm-${count.index + 1}"
+  resource_group_name   = azurerm_resource_group.main.name
+  location              = var.location
+  size                  = var.vm_size
+  admin_username        = var.admin_username
   network_interface_ids = [azurerm_network_interface.private[count.index].id]
 
   admin_ssh_key {
@@ -89,10 +88,11 @@ resource "azurerm_linux_virtual_machine" "private" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
+
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+    publisher = var.vm_image.publisher
+    offer     = var.vm_image.offer
+    sku       = var.vm_image.sku
+    version   = var.vm_image.version
   }
 }
